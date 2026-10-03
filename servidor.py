@@ -1,8 +1,8 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.')
 CORS(app)
 
 dados_aquario = {
@@ -22,9 +22,10 @@ dados_aquario = {
     "agenda": []
 }
 
+# ✅ Página principal — mostra o index.html bonito!
 @app.route("/")
 def inicio():
-    return jsonify({"mensagem": "🐠 App Aquarismo Online!"})
+    return send_from_directory('.', 'index.html')
 
 @app.route("/aquario", methods=["GET"])
 def ver_aquario():
@@ -45,4 +46,4 @@ def add_peixe():
 
 if __name__ == "__main__":
     porta = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=porta, debug=True)
+    app.run(host="0.0.0.0", port=porta)
