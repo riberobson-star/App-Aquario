@@ -3,319 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐠 App Aquarismo</title>
+    <title>🐠 App Aquário</title>
     <style>
-        * {margin:0; padding:0; box-sizing:border-box; font-family:system-ui;}
-        body {background:#0c4a6e; color:white; padding:20px; min-height:100vh;}
-        .container {max-width:850px; margin:0 auto;}
-        h1 {text-align:center; margin-bottom:25px; color:#67e8f9;}
-        .card {background:#164e63; border-radius:16px; padding:20px; margin-bottom:20px; box-shadow:0 4px 12px rgba(0,0,0,0.2);}
-        .card h2 {margin-bottom:15px; color:#a5f3fc; font-size:18px;}
-        input, button, select {padding:10px; border:none; border-radius:8px; margin:5px; font-size:15px;}
-        button {background:#22d3d1; color:#083344; font-weight:bold; cursor:pointer; transition:0.2s;}
-        button:hover {background:#06b6d4; transform:scale(1.03);}
-        .resultado {margin-top:15px; padding:12px; background:#0e7490; border-radius:10px; line-height:1.8;}
-        .linha {margin:10px 0;}
-        .aviso {color:#fcd34d; font-size:13px; margin-top:10px;}
-        .ok {color:#86efac;}
-        .alerta {color:#fcd34d;}
-        .perigo {color:#fca5a5;}
-        .tabs {display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;}
-        .tab {padding:12px 15px; background:#1e5d74; border-radius:8px; cursor:pointer; font-weight:500; transition:0.2s;}
-        .tab.ativo {background:#22d3d1; color:#083344; font-weight:bold;}
-        .tab:hover {transform:scale(1.05);}
-        .conteudo {display:none;}
-        .conteudo.ativo {display:block; animation:aparece 0.3s;}
-        @keyframes aparece {
-            from {opacity:0; transform:translateY(5px);}
-            to {opacity:1; transform:translateY(0);}
-        }
-        .grade {display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin:10px 0;}
-        .caixa {background:#0f5168; padding:12px; border-radius:10px; text-align:center;}
-        .caixa span {font-size:22px; font-weight:bold; display:block; margin:5px 0;}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background: linear-gradient(135deg, #0c4a6e, #1a8a9c); min-height: 100vh; color: #fff; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; padding: 20px; font-size: 1.8rem; }
+        
+        .abas { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 20px; }
+        .aba { flex: 1; min-width: 120px; padding: 12px; border: none; border-radius: 10px 10px 0 0; 
+               background: rgba(255,255,255,0.2); color: #fff; cursor: pointer; font-size: 1rem; }
+        .aba.ativa { background: #fff; color: #0c4a6e; font-weight: bold; }
+        
+        .conteudo { background: rgba(255,255,255,0.95); color: #333; padding: 25px; 
+                    border-radius: 0 0 15px 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .aba-conteudo { display: none; }
+        .aba-conteudo.ativa { display: block; }
+        
+        input, button, select { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #ddd; 
+                                 border-radius: 8px; font-size: 1rem; }
+        button { background: #0c4a6e; color: #fff; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #1a8a9c; }
+        .resultado { margin-top: 15px; padding: 15px; background: #e8f4f8; border-radius: 8px; font-weight: bold; }
+        .aviso { color: #d35400; margin-top: 10px; }
+        .ok { color: #27ae60; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>🐠 Meu Aquário</h1>
+    <div class="container">
+        <h1>🐠 App Aquário</h1>
 
-    <div class="tabs">
-        <div class="tab ativo" data-tab="calculadora">📐 Calculadora</div>
-        <div class="tab" data-tab="parametros">💧 Parâmetros</div>
-        <div class="tab" data-tab="peixes">🐟 Habitantes</div>
-        <div class="tab" data-tab="iluminacao">💡 Luz & Algas</div>
-    </div>
-
-    <!-- ABA CALCULADORA -->
-    <div id="calculadora" class="conteudo ativo">
-        <div class="card">
-            <h2>📐 Calculadora de Montagem</h2>
-            <div class="linha"><label>Comprimento (cm):</label>
-                <input type="number" id="comp" placeholder="ex: 80" oninput="calcular()"></div>
-            <div class="linha"><label>Largura / Fundo (cm):</label>
-                <input type="number" id="larg" placeholder="ex: 40" oninput="calcular()"></div>
-            <div class="linha"><label>Altura da Água (cm):</label>
-                <input type="number" id="altu" placeholder="ex: 45" oninput="calcular()"></div>
-            <div class="resultado" id="res">Preencha as medidas acima...</div>
-            <p class="aviso">⚠️ Travas a cada 45cm • Sempre use Isopor/EVA na base</p>
+        <div class="abas">
+            <button class="aba ativa" data-aba="calc">📐 Calculadora</button>
+            <button class="aba" data-aba="param">💧 Parâmetros</button>
+            <button class="aba" data-aba="peixes">🐟 Habitantes</button>
+            <button class="aba" data-aba="luz">☀️ Luz & Algas</button>
         </div>
-    </div>
 
-    <!-- ABA PARÂMETROS COMPLETA -->
-    <div id="parametros" class="conteudo">
-        <div class="card">
-            <h2>💧 Parâmetros da Água</h2>
-            <div class="grade">
-                <div class="caixa">pH <span id="vph">-</span></div>
-                <div class="caixa">KH <span id="vkh">-</span></div>
-                <div class="caixa">GH <span id="vgh">-</span></div>
-                <div class="caixa">Temperatura <span id="vtemp">-°C</span></div>
-                <div class="caixa">Amônia <span id="vammonia">-</span></div>
-                <div class="caixa">Nitrito <span id="vnitrito">-</span></div>
-                <div class="caixa">Nitrato <span id="vnitrato">-</span></div>
+        <div class="conteudo">
+            <!-- ABA 1: CALCULADORA -->
+            <div class="aba-conteudo ativa" id="calc">
+                <h3>📐 Volume do Aquário</h3>
+                <label>Comprimento (cm):</label>
+                <input type="number" id="comp" placeholder="Ex: 80">
+                <label>Largura (cm):</label>
+                <input type="number" id="larg" placeholder="Ex: 40">
+                <label>Altura da Água (cm):</label>
+                <input type="number" id="alt" placeholder="Ex: 40">
+                <button onclick="calcular()">Calcular Volume</button>
+                <div class="resultado" id="res-calc"></div>
             </div>
-            <div id="status-agua" style="margin-top:15px;"></div>
-        </div>
-        <div class="card">
-            <h2>✏️ Atualizar Valores</h2>
-            <div class="linha">pH: <input type="number" step="0.1" id="fph" placeholder="6.8"></div>
-            <div class="linha">KH: <input type="number" step="1" id="fkh" placeholder="4-8"></div>
-            <div class="linha">GH: <input type="number" step="1" id="fgh" placeholder="6-12"></div>
-            <div class="linha">Temperatura: <input type="number" step="1" id="ftemp" placeholder="26">°C</div>
-            <div class="linha">Amônia (NH₃): 
-                <select id="fammonia">
-                    <option value="0">0 ppm ✅</option>
-                    <option value="0.25">0.25 ppm ⚠️</option>
-                    <option value="0.5">0.5 ppm ⚠️</option>
-                    <option value="1">1+ ppm 🚨</option>
+
+            <!-- ABA 2: PARÂMETROS -->
+            <div class="aba-conteudo" id="param">
+                <h3>💧 Verificar Parâmetros</h3>
+                <label>pH:</label>
+                <input type="number" step="0.1" id="ph" placeholder="Ex: 6.8">
+                <label>Temperatura (°C):</label>
+                <input type="number" step="0.1" id="temp" placeholder="Ex: 26">
+                <label>GH (Dureza Geral):</label>
+                <input type="number" id="gh" placeholder="Ex: 6">
+                <button onclick="verificarParam()">Analisar</button>
+                <div class="resultado" id="res-param"></div>
+            </div>
+
+            <!-- ABA 3: HABITANTES -->
+            <div class="aba-conteudo" id="peixes">
+                <h3>🐟 Quantos peixes cabem?</h3>
+                <label>Volume total (litros):</label>
+                <input type="number" id="vol" placeholder="Resultado da aba 1">
+                <label>Tipo de peixe:</label>
+                <select id="tipo-peixe">
+                    <option value="0.5">Peixes pequenos (Neon, Tetra)</option>
+                    <option value="1">Peixes médios (Coridora, Betta)</option>
+                    <option value="3">Peixes grandes (Oscar, Acará)</option>
                 </select>
+                <button onclick="calcularPeixes()">Calcular</button>
+                <div class="resultado" id="res-peixes"></div>
             </div>
-            <div class="linha">Nitrito (NO₂): 
-                <select id="fnitrito">
-                    <option value="0">0 ppm ✅</option>
-                    <option value="0.25">0.25 ppm ⚠️</option>
-                    <option value="0.5">0.5+ ppm 🚨</option>
+
+            <!-- ABA 4: LUZ & ALGAS -->
+            <div class="aba-conteudo" id="luz">
+                <h3>☀️ Luz & Algas</h3>
+                <label>Quantas horas de luz por dia?</label>
+                <input type="number" id="horas-luz" placeholder="Ex: 8">
+                <label>Tem algas visíveis?</label>
+                <select id="tem-algas">
+                    <option value="nao">Não</option>
+                    <option value="pouco">Pouco</option>
+                    <option value="muito">Muito</option>
                 </select>
+                <button onclick="verificarLuz()">Analisar</button>
+                <div class="resultado" id="res-luz"></div>
             </div>
-            <div class="linha">Nitrato (NO₃): 
-                <select id="fnitrato">
-                    <option value="10">10 ppm ✅</option>
-                    <option value="25">25 ppm ✅</option>
-                    <option value="50">50 ppm ⚠️</option>
-                    <option value="80">80+ ppm 🚨</option>
-                </select>
-            </div>
-            <button onclick="salvarParametros()">Salvar Tudo ✅</button>
         </div>
     </div>
 
-    <!-- ABA PEIXES -->
-    <div id="peixes" class="conteudo">
-        <div class="card">
-            <h2>🐟 Habitantes</h2>
-            <div id="lista-peixes"></div>
-            <br>
-            <input type="text" id="nome-peixe" placeholder="Nome do peixe">
-            <input type="number" id="qtd-peixe" placeholder="Qtd" style="width:80px">
-            <button onclick="adicionarPeixe()">Adicionar 🐠</button>
-        </div>
-    </div>
+    <script>
+        // ✅ LINK JÁ CONFIGURADO!
+        const API = "https://app-aquario-2.onrender.com";
 
-    <!-- ABA ILUMINAÇÃO & ALGAS -->
-    <div id="iluminacao" class="conteudo">
-        <div class="card">
-            <h2>💡 Iluminação</h2>
-            <div class="linha">Tempo de luz por dia: 
-                <input type="number" id="horas-luz" placeholder="8" style="width:60px"> horas
-            </div>
-            <div class="linha">Potência da luz: 
-                <input type="number" id="w-luz" placeholder="30" style="width:60px"> W
-            </div>
-            <div class="linha">Plantas: 
-                <select id="nivel-plantas">
-                    <option value="poucas">Poucas / Sem plantas</option>
-                    <option value="medias">Plantas comuns</option>
-                    <option value="muitas">Plantas exigentes / Tecas</option>
-                </select>
-            </div>
-            <button onclick="calcularLuz()">Analisar 💡</button>
-            <div class="resultado" id="res-luz"></div>
-        </div>
-        <div class="card">
-            <h2>🌿 Controle de Algas</h2>
-            <div class="linha">Tipo de alga visível:
-                <select id="tipo-alga" onchange="mostrarDica()">
-                    <option value="">— Selecione —</option>
-                    <option value="verde">Alga verde / Água verde</option>
-                    <option value="marrom">Alga marrom / pelúcia</option>
-                    <option value="preta">Alga preta / rebarba</option>
-                    <option value="pelosa">Alga pelosa / cabelo</option>
-                    <option value="azul">Alga azul-esverdeada (cianobactéria)</option>
-                </select>
-            </div>
-            <div id="dica-alga" style="margin-top:12px; line-height:1.8;"></div>
-        </div>
-    </div>
-</div>
+        // Navegação entre abas
+        document.querySelectorAll('.aba').forEach(botao => {
+            botao.addEventListener('click', () => {
+                document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+                document.querySelectorAll('.aba-conteudo').forEach(c => c.classList.remove('ativa'));
+                botao.classList.add('ativa');
+                document.getElementById(botao.dataset.aba).classList.add('ativa');
+            });
+        });
 
-<script>
-const API = "http://127.0.0.1:5000";
+        // Calculadora de volume
+        function calcular() {
+            const c = Number(document.getElementById('comp').value);
+            const l = Number(document.getElementById('larg').value);
+            const a = Number(document.getElementById('alt').value);
+            if (!c || !l || !a) {
+                document.getElementById('res-calc').innerHTML = '<span class="aviso">Preencha todos os campos!</span>';
+                return;
+            }
+            const litros = (c * l * a) / 1000;
+            document.getElementById('res-calc').innerHTML = 
+                `✅ Volume: ${litros.toFixed(1)} litros`;
+        }
 
-// === ABAS ===
-document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-        const nome = this.getAttribute('data-tab');
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('ativo'));
-        document.querySelectorAll('.conteudo').forEach(c => c.classList.remove('ativo'));
-        this.classList.add('ativo');
-        document.getElementById(nome).classList.add('ativo');
-        if(nome==='parametros') carregarParametros();
-    });
-});
+        // Verificar parâmetros
+        function verificarParam() {
+            const ph = Number(document.getElementById('ph').value);
+            const temp = Number(document.getElementById('temp').value);
+            const gh = Number(document.getElementById('gh').value);
+            let resp = '';
 
-// === CALCULADORA ===
-function calcular(){
-    const C=+document.getElementById('comp').value || 0;
-    const L=+document.getElementById('larg').value || 0;
-    const H=+document.getElementById('altu').value || 0;
-    if(!C||!L||!H){document.getElementById('res').innerHTML="Preencha as 3 medidas...";return;}
-    const lit = (C*L*H)/1000;
-    const vidro = calcularVidro(C,H);
-    const aquecedor = Math.round(lit*1.5);
-    const filtroMin = Math.round(lit*3), filtroMax = Math.round(lit*5);
-    document.getElementById('res').innerHTML = `
-<div class="linha"><strong>💧 Litragem:</strong> ${lit.toFixed(1)} L</div>
-<div class="linha"><strong>📏 Vidro:</strong> ${vidro}</div>
-<div class="linha"><strong>🔥 Aquecedor:</strong> ${aquecedor} W</div>
-<div class="linha"><strong>🔄 Filtro:</strong> ${filtroMin} a ${filtroMax} L/h</div>
-<div class="linha"><strong>🧽 Isopor:</strong> ${C} × ${L} cm</div>`;
-}
-function calcularVidro(c,a){
-    if(c<=60&&a<=40)return"6 mm";
-    if(c<=80&&a<=45)return"6–8 mm";
-    if(c<=100&&a<=50)return"8–10 mm";
-    if(c<=150&&a<=60)return"10–12 mm";
-    return"12 mm+ — consulte profissional";
-}
+            if (ph >= 6.0 && ph <= 7.5) resp += '✅ pH ideal<br>';
+            else resp += `<span class="aviso">⚠️ pH ${ph} — ideal: 6.0 a 7.5</span><br>`;
 
-// === PARÂMETROS ===
-async function carregarParametros(){
-    try{
-        const r=await fetch(`${API}/aquario`);
-        const d=await r.json();
-        document.getElementById('vph').textContent = d.ph||'-';
-        document.getElementById('vkh').textContent = d.kh||'-';
-        document.getElementById('vgh').textContent = d.gh||'-';
-        document.getElementById('vtemp').textContent = (d.temperatura||'-')+'°C';
-        document.getElementById('vammonia').textContent = d.amonia||'0';
-        document.getElementById('vnitrito').textContent = d.nitrito||'0';
-        document.getElementById('vnitrato').textContent = d.nitrato||'10';
-        avaliarAgua(d);
-    }catch(e){}
-}
-async function salvarParametros(){
-    const dados = {
-        ph: +document.getElementById('fph').value,
-        kh: +document.getElementById('fkh').value,
-        gh: +document.getElementById('fgh').value,
-        temperatura: +document.getElementById('ftemp').value,
-        amonia: document.getElementById('fammonia').value,
-        nitrito: document.getElementById('fnitrito').value,
-        nitrato: document.getElementById('fnitrato').value
-    };
-    await fetch(`${API}/atualizar`,{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(dados)
-    });
-    alert('✅ Salvo!');
-    carregarParametros();
-}
-function avaliarAgua(d){
-    let html='', ok=true;
-    if(d.amonia&&+d.amonia>0){html+='<p class="perigo">🚨 Amônia detectada! Troque 30% da água agora!</p>';ok=false;}
-    if(d.nitrito&&+d.nitrito>0){html+='<p class="perigo">🚨 Nitrito presente! Troque água e verifique o filtro!</p>';ok=false;}
-    if(d.nitrato&&+d.nitrato>50){html+='<p class="alerta">⚠️ Nitrato alto → trocar água com mais frequência</p>';}
-    if(d.ph&&(d.ph<6.0||d.ph>7.5)){html+='<p class="alerta">⚠️ pH fora do ideal (6.0–7.5)</p>';}
-    if(d.kh&&d.kh<3){html+='<p class="alerta">⚠️ KH baixo → risco de queda brusca de pH</p>';}
-    if(ok)html='<p class="ok">✅ Parâmetros dentro do esperado! Continue assim!</p>';
-    document.getElementById('status-agua').innerHTML=html;
-}
+            if (temp >= 24 && temp <= 28) resp += '✅ Temperatura ideal<br>';
+            else resp += `<span class="aviso">⚠️ Temp ${temp}°C — ideal: 24 a 28°C</span><br>`;
 
-// === ILUMINAÇÃO ===
-function calcularLuz(){
-    const h=+document.getElementById('horas-luz').value||8;
-    const w=+document.getElementById('w-luz').value||20;
-    const tipo=document.getElementById('nivel-plantas').value;
-    let rec='', horasIdeal='8 a 10 horas';
-    if(tipo==='poucas'){rec='Baixa luz basta — 6–8h/dia';horasIdeal='6 a 8 horas';}
-    if(tipo==='medias'){rec='Luz moderada — 8–10h/dia';horasIdeal='8 a 10 horas';}
-    if(tipo==='muitas'){rec='Luz forte + CO₂ recomendado — 10–12h/dia';horasIdeal='10 a 12 horas';}
-    let avisoHoras = (h>11)?'<br>⚠️ Muitas horas de luz → risco de algas!':'';
-    document.getElementById('res-luz').innerHTML = `
-<div class="linha">🕐 Tempo atual: ${h}h por dia</div>
-<div class="linha">💡 Recomendado: ${horasIdeal}</div>
-<div class="linha">🌱 Plantas: ${rec}</div>
-<div class="linha">💧 Potência: ${w}W — ajuste conforme crescimento das plantas</div>
-${avisoHoras}
-<div class="linha">💡 Dica: Acenda/apague em fases (2h de manhã + 2h à tarde) reduz algas!</div>`;
-}
+            if (gh >= 4 && gh <= 12) resp += '✅ Dureza ideal';
+            else resp += `<span class="aviso">⚠️ GH ${gh} — ideal: 4 a 12</span>`;
 
-// === ALGAS ===
-function mostrarDica(){
-    const tipo=document.getElementById('tipo-alga').value;
-    const dicas={
-        verde:`<strong>🌿 Alga verde / água verde</strong><br>
-Causa: Excesso de luz + nitratos altos<br>
-✅ Reduzir tempo de luz para 6h<br>
-✅ Trocar 30% da água<br>
-✅ Incluir peixes limpadores (Coridoras, Otocínclos)`,
-        marrom:`<strong>🟤 Alga marrom</strong><br>
-Causa: Nitratos baixos, luz fraca, água nova<br>
-✅ Aumentar um pouco a luz<br>
-✅ Fertilizar plantas<br>
-✅ Melhora sozinha com tempo`,
-        preta:`<strong>⚫ Alga preta / rebarba</strong><br>
-Causa: Excesso de nutrientes + fluxo forte<br>
-✅ Remover folhas afetadas<br>
-✅ Reduzir alimentação dos peixes<br>
-✅ Trocar água com frequência`,
-        pelosa:`<strong>🟢 Alga pelosa / cabelo</strong><br>
-Causa: Luz forte + excesso de ferro<br>
-✅ Reduzir tempo de luz<br>
-✅ Parar fertilizante de ferro<br>
-✅ Peixes limpadores ajudam`,
-        azul:`<strong>🔵 Cianobactéria (azul-esverdeada)</strong><br>
-Causa: Acúmulo de matéria orgânica<br>
-✅ Troca de água + aspirar o fundo<br>
-✅ Reduzir tempo de luz<br>
-✅ Pode cobrir com pano escuro por 3 dias`
-    };
-    document.getElementById('dica-alga').innerHTML = tipo?dicas[tipo]:'Escolha o tipo de alga para ver o que fazer';
-}
+            document.getElementById('res-param').innerHTML = resp;
+        }
 
-// === PEIXES ===
-async function carregar(){
-    try{
-        const res=await fetch(`${API}/aquario`);
-        const d=await res.json();
-        let html='';
-        d.habitantes.forEach(p=>{html+=`<div class="linha">${p.nome} — ${p.quantidade} unidades</div>`;});
-        document.getElementById("lista-peixes").innerHTML=html;
-    }catch(e){}
-}
-async function adicionarPeixe(){
-    const n=document.getElementById("nome-peixe").value;
-    const q=parseInt(document.getElementById("qtd-peixe").value);
-    if(!n||!q)return;
-    await fetch(`${API}/adicionar-peixe`,{
-        method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({nome:n,quantidade:q})
-    });
-    document.getElementById("nome-peixe").value="";
-    document.getElementById("qtd-peixe").value="";
-    carregar();
-}
-carregar();
-</script>
+        // Calcular quantidade de peixes
+        function calcularPeixes() {
+            const vol = Number(document.getElementById('vol').value);
+            const espaco = Number(document.getElementById('tipo-peixe').value);
+            if (!vol) {
+                document.getElementById('res-peixes').innerHTML = 
+                    '<span class="aviso">Coloque o volume da aba 1!</span>';
+                return;
+            }
+            const qtd = Math.floor(vol / espaco / 2); // margem de segurança
+            document.getElementById('res-peixes').innerHTML = 
+                `✅ Cabem aproximadamente ${qtd} peixes (com folga)`;
+        }
+
+        // Luz e algas
+        function verificarLuz() {
+            const horas = Number(document.getElementById('horas-luz').value);
+            const algas = document.getElementById('tem-algas').value;
+            let resp = '';
+
+            if (horas >= 6 && horas <= 9) resp += '✅ Tempo de luz ideal<br>';
+            else resp += `<span class="aviso">⚠️ ${horas}h — ideal: 6 a 9h</span><br>`;
+
+            if (algas === 'muito') resp += 
+                '<span class="aviso">🔴 Reduza a luz! Faça trocas parciais de água</span>';
+            else if (algas === 'pouco') resp += 
+                '<span class="aviso">🟡 Fique de olho — pode aumentar</span>';
+            else resp += '✅ Sem sinais de alga';
+
+            document.getElementById('res-luz').innerHTML = resp;
+        }
+    </script>
 </body>
 </html>
