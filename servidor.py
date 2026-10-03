@@ -7,8 +7,8 @@ import hashlib
 app = Flask(__name__, static_folder='.')
 CORS(app)
 
-# 🔐 SENHA DO ADMINISTRADOR — VOCÊ ALTERA ABAIXO!
-SENHA_ADMIN = "dono123"  # ← COLOQUE SUA SENHA AQUI!
+# 🔐 SENHA DO ADMINISTRADOR — ALTERE ABAIXO PARA SUA!
+SENHA_ADMIN = "ives123"  # ← COLOQUE A SENHA QUE VOCÊ QUISER!
 
 # BANCO DE DADOS
 usuarios = {}
@@ -53,14 +53,14 @@ def bpl(): return jsonify(banco_plantas)
 @app.route("/doencas")
 def d(): return jsonify(doencas)
 
-# === LOGIN DO ADMINISTRADOR ===
+# === LOGIN DO ADMINISTRADOR / IVES ===
 @app.route("/admin-login", methods=["POST"])
 def admin_login():
     dados = request.json
     if dados.get("senha") == SENHA_ADMIN:
         token_admin = str(uuid.uuid4())
         sessoes_admin.add(token_admin)
-        return jsonify({"ok": True, "admin_token": token_admin})
+        return jsonify({"ok": True, "admin_token": token_admin, "nome_dono": "Ives"})
     return jsonify({"ok": False, "erro": "Senha do administrador incorreta"}), 401
 
 # === PAINEL DO DONO — VER TODOS OS USUÁRIOS ===
@@ -116,7 +116,7 @@ def admin_detalhes_usuario(email_usuario):
         }
     })
 
-# === EXCLUIR USUÁRIO (AÇÃO DO DONO) ===
+# === EXCLUIR USUÁRIO ===
 @app.route("/admin/excluir-usuario", methods=["POST"])
 def admin_excluir_usuario():
     token = request.json.get("admin_token")
@@ -125,10 +125,8 @@ def admin_excluir_usuario():
         return jsonify({"ok": False, "erro": "Acesso negado"}), 403
     if email in usuarios:
         del usuarios[email]
-        # Remove sessões ativas desse usuário
         for sessao, e in list(sessoes.items()):
-            if e == email:
-                del sessoes[sessao]
+            if e == email: del sessoes[sessao]
         return jsonify({"ok": True, "mensagem": "Usuário excluído com sucesso"})
     return jsonify({"ok": False, "erro": "Usuário não encontrado"}), 404
 
@@ -136,8 +134,7 @@ def admin_excluir_usuario():
 @app.route("/admin-sair", methods=["POST"])
 def admin_sair():
     token = request.json.get("admin_token")
-    if token in sessoes_admin:
-        sessoes_admin.remove(token)
+    if token in sessoes_admin: sessoes_admin.remove(token)
     return jsonify({"ok": True})
 
 # === CADASTRO DE USUÁRIO ===
@@ -304,4 +301,4 @@ def sair():
     return jsonify({"ok":True})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT",5000)))
+    app.run(host="0.0.0.0", port=int(__import__("os").environ.get("PORT", 5000)))
