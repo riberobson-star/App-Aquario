@@ -3,466 +3,423 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🐠 Aquário Master — Painel do Ives</title>
+<title>🐠 Aquário Master — v2.0</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
-:root{--azul:#0369a1;--azul-escuro:#075985;--verde:#16a34a;--amarelo:#ca8a04;--vermelho:#dc2626;--ouro:#d97706;--fundo:linear-gradient(135deg,#0c4a6e,#0891b2);--card:#fff;--texto:#1e293b;--borda:#e2e8f0}
-.escuro{--azul:#38bdf8;--fundo:linear-gradient(135deg,#0f172a,#1e293b);--card:#1e293b;--texto:#e2e8f0;--borda:#334155}
-body{background:var(--fundo);min-height:100vh;color:#fff}
+:root{--azul:#0369a1;--azul-escuro:#075985;--verde:#16a34a;--amarelo:#ca8a04;--vermelho:#dc2626;--fundo:linear-gradient(135deg,#0c4a6e,#0891b2);--card:#ffffff;--texto:#1e293b;--borda:#e2e8f0;--sombra:0 4px 20px rgba(0,0,0,.1)}
+.escuro{--azul:#38bdf8;--azul-escuro:#0ea5e9;--fundo:linear-gradient(135deg,#0f172a,#1e293b);--card:#1e293b;--texto:#e2e8f0;--borda:#334155;--sombra:0 4px 20px rgba(0,0,0,.3)}
+body{background:var(--fundo);min-height:100vh;color:#fff;transition:all .3s ease}
 .container{max-width:960px;margin:0 auto;padding:15px}
 .topo{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:10px}
-.topo h1{font-size:1.4rem;display:flex;align-items:center;gap:8px}
-.usuario-info{font-size:.85rem;opacity:.9}
-.status{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:.9rem}
-.status.ok{background:#22c55e;color:#fff}
-.status.aviso{background:#eab308;color:#000}
-.status.alerta{background:#ef4444;color:#fff}
-.bt-tema,.bt-sair,.bt-admin{background:rgba(255,255,255,.2);border:none;padding:8px 12px;border-radius:8px;color:#fff;cursor:pointer;margin-left:5px;font-size:.85rem}
-.bt-admin{background:linear-gradient(135deg,#f59e0b,#d97706);font-weight:bold}
-.tela{display:none}
-.tela.ativa{display:block}
-.caixa-login{max-width:440px;margin:40px auto;background:var(--card);color:var(--texto);padding:30px;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
-.caixa-login h2{text-align:center;margin-bottom:20px;color:var(--azul)}
-.aba-form{display:flex;margin-bottom:20px;border-radius:12px;overflow:hidden;background:#f1f5f9}
-.aba-form button{flex:1;padding:12px 8px;border:none;background:transparent;color:var(--texto);cursor:pointer;font-weight:bold;font-size:.85rem;transition:.2s}
-.aba-form button.ativa{background:var(--azul);color:#fff}
-input,select,textarea{width:100%;padding:12px;margin:8px 0;border:2px solid var(--borda);border-radius:10px;font-size:.95rem;background:transparent;color:var(--texto)}
-input:focus,select:focus{outline:none;border-color:var(--azul)}
-button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:10px;font-size:.95rem;font-weight:bold;cursor:pointer;transition:.2s}
-button:hover{opacity:.95;transform:translateY(-1px)}
-button.sucesso{background:var(--verde);color:#fff}
-button.perigo{background:var(--vermelho);color:#fff}
-button.ouro{background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff}
-button.secundario{background:transparent;border:2px solid var(--azul);color:var(--azul)}
-button.pequeno{width:auto;padding:8px 12px;margin:4px;font-size:.85rem}
-button.linha{display:inline-block;width:auto;margin:4px 2px}
-.erro{color:var(--vermelho);padding:10px;background:rgba(220,38,38,.1);border-radius:8px;margin:10px 0}
-.sucesso-msg{color:var(--verde);padding:10px;background:rgba(22,163,74,.1);border-radius:8px;margin:10px 0}
+.topo h1{font-size:1.5rem;display:flex;align-items:center;gap:8px}
+.status{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:30px;font-weight:bold;font-size:.9rem;transition:.3s}
+.status.ok{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 2px 10px rgba(22,163,74,.3)}
+.status.aviso{background:linear-gradient(135deg,#eab308,#ca8a04);color:#000;box-shadow:0 2px 10px rgba(202,138,4,.3)}
+.status.alerta{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 2px 10px rgba(220,38,38,.3)}
+.bt-tema{background:rgba(255,255,255,.2);border:none;padding:10px 14px;border-radius:10px;color:#fff;cursor:pointer;font-size:1.1rem;transition:.2s}
+.bt-tema:hover{background:rgba(255,255,255,.3)}
 .resumo{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0}
-.resumo-card{background:rgba(255,255,255,.15);padding:18px 12px;border-radius:14px;text-align:center;backdrop-filter:blur(4px)}
+.resumo-card{background:rgba(255,255,255,.15);padding:18px 12px;border-radius:14px;text-align:center;backdrop-filter:blur(6px);transition:.3s}
+.resumo-card:hover{transform:translateY(-2px)}
 .resumo-card span{font-size:1.6rem;font-weight:bold;display:block;margin-top:4px}
+.resumo-card small{opacity:.8;font-size:.75rem}
 .abas{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0}
-.aba{flex:1;min-width:90px;padding:12px 10px;border:none;border-radius:12px;background:rgba(255,255,255,.18);color:#fff;cursor:pointer;font-size:.85rem;transition:.2s}
+.aba{flex:1;min-width:100px;padding:12px 10px;border:none;border-radius:12px;background:rgba(255,255,255,.18);color:#fff;cursor:pointer;font-size:.85rem;transition:.25s ease}
 .aba:hover{background:rgba(255,255,255,.28)}
-.aba.ativa{background:#fff;color:var(--azul);font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.1)}
-.conteudo{background:var(--card);color:var(--texto);padding:24px;border-radius:18px;box-shadow:0 4px 20px rgba(0,0,0,.1);margin-top:15px}
-h3{margin:20px 0 10px;color:var(--azul);font-size:1.1rem}
-h4{margin:16px 0 8px}
+.aba.ativa{background:#fff;color:var(--azul);font-weight:bold;box-shadow:var(--sombra)}
+.pagina{display:none;animation:aparece .3s ease}
+@keyframes aparece{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.pagina.ativa{display:block}
+.conteudo{background:var(--card);color:var(--texto);padding:24px;border-radius:18px;box-shadow:var(--sombra)}
+h2{font-size:1.25rem;margin-bottom:15px;color:var(--azul)}
+h3{margin:20px 0 10px;color:var(--azul);font-size:1.05rem}
+h4{margin:16px 0 8px;font-size:.95rem}
 p{margin:8px 0;line-height:1.5}
 label{display:block;margin-top:12px;font-weight:600;font-size:.9rem}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border:2px solid var(--borda);border-radius:10px;font-size:.95rem;background:transparent;color:var(--texto);transition:.2s}
+input:focus,select:focus{outline:none;border-color:var(--azul)}
+button{width:100%;padding:12px;margin:8px 0 4px;border:none;border-radius:10px;font-size:.95rem;font-weight:bold;cursor:pointer;transition:.2s}
+button:hover{transform:translateY(-1px);opacity:.95}
+button.sucesso{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff}
+button.aviso{background:linear-gradient(135deg,#eab308,#ca8a04);color:#000}
+button.perigo{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
+button.secundario{background:transparent;border:2px solid var(--azul);color:var(--azul)}
+button.pequeno{width:auto;padding:8px 14px;font-size:.85rem;margin:4px}
+button.linha{display:inline-block;width:auto;margin:4px 2px}
 .card{padding:16px;margin:12px 0;border-radius:12px;background:rgba(3,105,161,.04);border-left:4px solid var(--azul);transition:.2s}
 .card:hover{background:rgba(3,105,161,.08)}
 .card.ok{border-left-color:var(--verde);background:rgba(22,163,74,.06)}
 .card.aviso{border-left-color:var(--amarelo);background:rgba(202,138,4,.06)}
 .card.err{border-left-color:var(--vermelho);background:rgba(220,38,38,.06)}
+.card.concluida{opacity:.65;text-decoration:line-through}
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.filtro{padding:8px 14px;border-radius:10px;border:none;background:var(--borda);cursor:pointer;font-size:.85rem;transition:.2s}
+.filtro.ativo{background:var(--azul);color:#fff}
+.tag{display:inline-block;padding:4px 10px;border-radius:12px;font-size:.75rem;margin:4px 2px}
+.tag-paz{background:#dcfce7;color:#166534}
+.tag-terr{background:#fee2e2;color:#991b1b}
+.tag-card{background:#dbeafe;color:#1e40af}
+.tag-fundo{background:#f3e8ff;color:#6b21a8}
+.tag-grande{background:#fef3c7;color:#92400e}
 .linha{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .linha > div{flex:1;min-width:130px}
+.erro{color:var(--vermelho);padding:10px;background:rgba(220,38,38,.1);border-radius:8px;margin:10px 0}
+.sucesso-msg{color:var(--verde);padding:10px;background:rgba(22,163,74,.1);border-radius:8px;margin:10px 0}
 .oculto{display:none!important}
-.tabela{width:100%;border-collapse:collapse;margin:15px 0;font-size:.85rem}
-.tabela th,.tabela td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--borda)}
-.tabela th{background:rgba(3,105,161,.08);font-weight:bold;color:var(--azul)}
-.tabela tr:hover{background:rgba(3,105,161,.04)}
-.badge{display:inline-block;padding:3px 8px;border-radius:10px;font-size:.75rem;font-weight:bold;margin-left:6px}
-.badge-dono{background:linear-gradient(135deg,#fef3c7,#fcd34d);color:#92400e}
-@media(max-width:768px){.tabela{font-size:.75rem}.tabela th,.tabela td{padding:8px 4px}}
+ul{margin-left:20px;margin-top:8px}
+li{margin:4px 0}
+@media(max-width:600px){.linha{display:block}}
 </style>
 </head>
 <body>
-
-<!-- TELA INICIAL — LOGIN / CADASTRO / PAINEL DO DONO -->
-<div class="container tela ativa" id="tela-auth">
-  <div class="caixa-login">
-    <h1 style="text-align:center;color:var(--azul);margin-bottom:5px">🐠 Aquário Master</h1>
-    <p style="text-align:center;color:#666;margin-bottom:20px">Bem-vindo! Escolha uma opção</p>
-    
-    <div class="aba-form">
-      <button class="ativa" onclick="trocarAbaForm('login')">Entrar</button>
-      <button onclick="trocarAbaForm('cadastro')">Criar Conta</button>
-      <button onclick="trocarAbaForm('admin')" style="color:#b45309">👑 Ives</button>
-    </div>
-
-    <!-- FORM LOGIN -->
-    <div id="form-login">
-      <h3>🔐 Acessar sua conta</h3>
-      <div id="msg-erro-login" class="erro oculto"></div>
-      <label>E-mail:</label>
-      <input type="email" id="login-email" placeholder="seu@email.com">
-      <label>Senha:</label>
-      <input type="password" id="login-senha" placeholder="Sua senha">
-      <button onclick="fazerLogin()">Entrar 🔑</button>
-    </div>
-
-    <!-- FORM CADASTRO -->
-    <div id="form-cadastro" class="oculto">
-      <h3>📝 Criar nova conta</h3>
-      <div id="msg-erro-cad" class="erro oculto"></div>
-      <div id="msg-sucesso-cad" class="sucesso-msg oculto"></div>
-      
-      <label>Nome Completo:</label>
-      <input type="text" id="cad-nome" placeholder="Seu nome">
-      
-      <label>E-mail:</label>
-      <input type="email" id="cad-email" placeholder="seu@email.com">
-      
-      <label>Senha:</label>
-      <input type="password" id="cad-senha" placeholder="Mínimo 6 caracteres">
-      
-      <label>WhatsApp:</label>
-      <input type="tel" id="cad-whatsapp" placeholder="(11) 99999-9999">
-      
-      <label>Estado:</label>
-      <select id="cad-estado">
-        <option value="">Selecione</option>
-        <option value="AC">Acre</option>
-        <option value="AL">Alagoas</option>
-        <option value="AP">Amapá</option>
-        <option value="AM">Amazonas</option>
-        <option value="BA">Bahia</option>
-        <option value="CE">Ceará</option>
-        <option value="DF">Distrito Federal</option>
-        <option value="ES">Espírito Santo</option>
-        <option value="GO">Goiás</option>
-        <option value="MA">Maranhão</option>
-        <option value="MT">Mato Grosso</option>
-        <option value="MS">Mato Grosso do Sul</option>
-        <option value="MG">Minas Gerais</option>
-        <option value="PA">Pará</option>
-        <option value="PB">Paraíba</option>
-        <option value="PR">Paraná</option>
-        <option value="PE">Pernambuco</option>
-        <option value="PI">Piauí</option>
-        <option value="RJ">Rio de Janeiro</option>
-        <option value="RN">Rio Grande do Norte</option>
-        <option value="RS">Rio Grande do Sul</option>
-        <option value="RO">Rondônia</option>
-        <option value="RR">Roraima</option>
-        <option value="SC">Santa Catarina</option>
-        <option value="SP" selected>São Paulo</option>
-        <option value="SE">Sergipe</option>
-        <option value="TO">Tocantins</option>
-      </select>
-      
-      <label>Cidade:</label>
-      <input type="text" id="cad-cidade" placeholder="Sua cidade">
-      
-      <button class="sucesso" onclick="fazerCadastro()">Criar Conta ✅</button>
-    </div>
-
-    <!-- PAINEL DO DONO — IVES -->
-    <div id="form-admin" class="oculto">
-      <h3 style="text-align:center;color:var(--ouro)">👑 Painel do Ives</h3>
-      <p style="color:#666;font-size:.85rem;margin-bottom:15px;text-align:center">Acesso exclusivo do dono do sistema</p>
-      <div id="msg-erro-admin" class="erro oculto"></div>
-      <label>Senha Mestra:</label>
-      <input type="password" id="admin-senha" placeholder="Digite a senha do Painel">
-      <button class="ouro" onclick="loginAdmin()">Entrar no Painel 🔐</button>
-    </div>
-  </div>
-</div>
-
-<!-- TELA DO PAINEL ADMINISTRATIVO -->
-<div class="container tela" id="tela-admin">
+<div class="container">
   <div class="topo">
-    <div>
-      <h1 style="color:#fef3c7">👑 Painel do Ives <span class="badge badge-dono">Dono</span></h1>
-      <p class="usuario-info">Controle total — Aquário Master</p>
-    </div>
-    <div>
+    <h1>🐠 Aquário Master <small style="font-size:.7rem;opacity:.7">v2.0</small></h1>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span class="status aviso" id="status-geral">⏳ Conectando...</span>
       <button class="bt-tema" onclick="alternarTema()">🌙</button>
-      <button class="bt-sair" onclick="sairAdmin()">Sair</button>
-    </div>
-  </div>
-
-  <div class="resumo">
-    <div class="resumo-card">
-      👥 Total de Usuários<br>
-      <span id="admin-total-usuarios">0</span>
-    </div>
-    <div class="resumo-card">
-      📅 Cadastrados Hoje<br>
-      <span id="admin-cad-hoje">0</span>
-    </div>
-    <div class="resumo-card">
-      🐠 Com Peixes<br>
-      <span id="admin-ativos">0</span>
-    </div>
-    <div class="resumo-card">
-      📍 Cidades<br>
-      <span id="admin-cidades">0</span>
-    </div>
-  </div>
-
-  <div class="abas">
-    <button class="aba ativa" data-painel="lista" onclick="trocarPainelAdmin('lista')">📋 Todos</button>
-    <button class="aba" data-painel="detalhes" onclick="trocarPainelAdmin('detalhes')">👤 Detalhes</button>
-  </div>
-
-  <div class="conteudo" id="painel-lista">
-    <h3>📋 Lista Completa de Usuários</h3>
-    <div id="tabela-usuarios"></div>
-  </div>
-
-  <div class="conteudo oculto" id="painel-detalhes">
-    <h3>👤 Dados do Usuário</h3>
-    <div id="dados-usuario-completo"></div>
-  </div>
-</div>
-
-<!-- TELA PRINCIPAL DO USUÁRIO COMUM -->
-<div class="container tela" id="tela-principal">
-  <div class="topo">
-    <div>
-      <h1>🐠 Aquário Master</h1>
-      <p class="usuario-info" id="dados-usuario">—</p>
-    </div>
-    <div>
-      <span class="status ok" id="status-geral">✅ Tudo OK</span>
-      <button class="bt-tema" onclick="alternarTema()">🌙</button>
-      <button class="bt-sair" onclick="sair()">Sair</button>
     </div>
   </div>
 
   <div class="resumo">
     <div class="resumo-card">Volume<br><span id="vol">0 L</span><small id="ocupacao">—</small></div>
-    <div class="resumo-card">Espécies<br><span id="qtd-peixes">0</span><small>no aquário</small></div>
+    <div class="resumo-card">Espécies<br><span id="qtd-peixes">0</span><small>habitantes</small></div>
+    <div class="resumo-card">Banco<br><span id="qtd-banco">0</span><small>espécies</small></div>
     <div class="resumo-card">Gastos<br><span id="total-gasto">R$0</span><small>investido</small></div>
-    <div class="resumo-card">Tarefas<br><span id="qtd-pendentes">0</span><small>pendentes</small></div>
   </div>
 
   <div class="abas">
-    <button class="aba ativa" data-pag="inicio" onclick="trocarPagina('inicio')">🏠 Início</button>
-    <button class="aba" data-pag="banco" onclick="trocarPagina('banco')">🐟 Banco</button>
-    <button class="aba" data-pag="meus" onclick="trocarPagina('meus')">🏡 Meus</button>
-    <button class="aba" data-pag="agua" onclick="trocarPagina('agua')">💧 Água</button>
-    <button class="aba" data-pag="plantas" onclick="trocarPagina('plantas')">🌿 Plantas</button>
-    <button class="aba" data-pag="rotina" onclick="trocarPagina('rotina')">📅 Rotina</button>
-    <button class="aba" data-pag="saude" onclick="trocarPagina('saude')">🏥 Saúde</button>
-    <button class="aba" data-pag="gastos" onclick="trocarPagina('gastos')">💰 Gastos</button>
-    <button class="aba" data-pag="desejos" onclick="trocarPagina('desejos')">🛒 Desejos</button>
+    <button class="aba ativa" data-pag="inicio">🏠 Início</button>
+    <button class="aba" data-pag="banco">🐟 Banco</button>
+    <button class="aba" data-pag="meus">🏡 Meus</button>
+    <button class="aba" data-pag="agua">💧 Água</button>
+    <button class="aba" data-pag="plantas">🌿 Plantas</button>
+    <button class="aba" data-pag="rotina">🔧 Rotina</button>
+    <button class="aba" data-pag="saude">🏥 Saúde</button>
+    <button class="aba" data-pag="gastos">💰 Gastos</button>
+    <button class="aba" data-pag="desejos">🛒 Desejos</button>
   </div>
 
-  <div class="conteudo" id="pag-inicio">
-    <h3>📐 Dados do Aquário</h3>
-    <div class="linha">
-      <div><label>Comprimento (cm):</label><input type="number" id="c" placeholder="Ex: 80"></div>
-      <div><label>Largura (cm):</label><input type="number" id="l" placeholder="Ex: 40"></div>
-      <div><label>Altura da água (cm):</label><input type="number" id="a" placeholder="Ex: 40"></div>
+  <div class="conteudo">
+    <!-- INÍCIO -->
+    <div class="pagina ativa" id="inicio">
+      <h2>📐 Dados do Aquário</h2>
+      <div class="linha">
+        <div><label>Comprimento (cm):</label><input type="number" id="c" placeholder="Ex: 80"></div>
+        <div><label>Largura (cm):</label><input type="number" id="l" placeholder="Ex: 40"></div>
+        <div><label>Altura da água (cm):</label><input type="number" id="a" placeholder="Ex: 40"></div>
+      </div>
+      <button class="sucesso" onclick="calcVol()">💾 Salvar Volume</button>
+      <div class="card" id="res-vol"></div>
+
+      <h3>📋 Tarefas Pendentes</h3>
+      <div id="tarefas-inicio"></div>
+      
+      <h3>📊 Última Medição</h3>
+      <div id="ultima-med"></div>
     </div>
-    <button class="sucesso" onclick="salvarVolume()">💾 Salvar Dimensões</button>
-    <div class="card" id="res-vol"></div>
-    <h3>📋 Tarefas Pendentes</h3>
-    <div id="tarefas-inicio"></div>
-    <h3>📊 Última Medição</h3>
-    <div id="ultima-med"></div>
-  </div>
 
-  <div class="conteudo oculto" id="pag-banco">
-    <h3>🐟 Banco de Espécies</h3>
-    <input type="text" id="busca" placeholder="🔍 Buscar por nome, científico, origem..." oninput="atualizarBanco()">
-    <div class="linha" style="margin:10px 0">
-      <button class="pequeno linha" onclick="filtrarBanco('todos')">Todos</button>
-      <button class="pequeno linha" onclick="filtrarBanco('pacifico')">Pacíficos</button>
-      <button class="pequeno linha" onclick="filtrarBanco('fundo')">Fundo</button>
-      <button class="pequeno linha" onclick="filtrarBanco('compat')">Cabem Aqui</button>
+    <!-- BANCO DE PEIXES -->
+    <div class="pagina" id="banco">
+      <h2>🐟 Banco de Espécies</h2>
+      <input type="text" id="busca" placeholder="🔍 Buscar por nome, científico ou origem..." oninput="atualizarBanco()">
+      <div class="filtros">
+        <button class="filtro ativo" data-filtro="todos" onclick="filtrarBanco('todos')">Todos</button>
+        <button class="filtro" data-filtro="pacifico" onclick="filtrarBanco('pacifico')">Pacíficos</button>
+        <button class="filtro" data-filtro="cardume" onclick="filtrarBanco('cardume')">Cardume</button>
+        <button class="filtro" data-filtro="fundo" onclick="filtrarBanco('fundo')">Fundo</button>
+        <button class="filtro" data-filtro="grande" onclick="filtrarBanco('grande')">Grandes</button>
+        <button class="filtro" data-filtro="compat" onclick="filtrarBanco('compat')">Cabem Aqui</button>
+      </div>
+      <div id="lista-banco"></div>
     </div>
-    <div id="lista-banco"></div>
-  </div>
 
-  <div class="conteudo oculto" id="pag-meus">
-    <h3>🏡 Meus Habitantes</h3>
-    <label>Adicionar peixe:</label>
-    <select id="sel-peixe"><option value="">Escolha no Banco</option></select>
-    <div class="linha">
-      <div><label>Quantidade:</label><input type="number" id="qtd" value="1" min="1"></div>
-      <div><label>Valor unitário (R$):</label><input type="number" step="0.01" id="valor" placeholder="0.00"></div>
+    <!-- MEUS HABITANTES -->
+    <div class="pagina" id="meus">
+      <h2>🏡 Meus Habitantes</h2>
+      <h3>➕ Adicionar Novo</h3>
+      <label>Espécie:</label>
+      <select id="sel-peixe"><option value="">-- Escolha no Banco --</option></select>
+      <div class="linha">
+        <div><label>Quantidade:</label><input type="number" id="qtd" value="1" min="1"></div>
+        <div><label>Valor (R$):</label><input type="number" step="0.01" id="valor" placeholder="0.00"></div>
+      </div>
+      <label>Observação / Origem:</label>
+      <input type="text" id="obs" placeholder="Ex: Comprei na loja X, dia 01/10">
+      <button class="sucesso" onclick="adicionarPeixe()">✅ Adicionar ao Aquário</button>
+      <div id="msg-meus" class="oculto"></div>
+      
+      <h3>📋 Lista de Habitantes</h3>
+      <div id="lista-meus"></div>
+      
+      <h3>✅ Compatibilidade — Quem pode entrar?</h3>
+      <button class="secundario" onclick="verificarCompat()">🔍 Analisar Combinações</button>
+      <div id="res-compat"></div>
     </div>
-    <button class="sucesso" onclick="adicionarPeixe()">➕ Adicionar ao Aquário</button>
-    <div id="lista-meus"></div>
-  </div>
 
-  <div class="conteudo oculto" id="pag-agua">
-    <h3>💧 Registrar Medição</h3>
-    <div class="linha">
-      <div><label>pH:</label><input type="number" step="0.1" id="ph" placeholder="6.0–7.5"></div>
-      <div><label>Temp (°C):</label><input type="number" step="0.1" id="temp" placeholder="24–28"></div>
+    <!-- ÁGUA & MEDIÇÕES -->
+    <div class="pagina" id="agua">
+      <h2>💧 Água & Parâmetros</h2>
+      <h3>📊 Registrar Medição</h3>
+      <div class="linha">
+        <div><label>pH:</label><input type="number" step="0.1" id="ph" placeholder="6.0–7.5"></div>
+        <div><label>Temp (°C):</label><input type="number" step="0.1" id="temp" placeholder="24–28"></div>
+      </div>
+      <div class="linha">
+        <div><label>GH (dureza):</label><input type="number" id="gh" placeholder="2–15"></div>
+        <div><label>Nitrato NO₃ (ppm):</label><input type="number" id="no3" placeholder="< 40"></div>
+      </div>
+      <button class="sucesso" onclick="registrarMedicao()">💾 Salvar Medição</button>
+      <div id="res-med"></div>
+      
+      <h3>📈 Histórico de Medições</h3>
+      <div id="lista-historico"></div>
     </div>
-    <div class="linha">
-      <div><label>GH:</label><input type="number" id="gh" placeholder="2–15"></div>
-      <div><label>NO₃ (ppm):</label><input type="number" id="no3" placeholder="< 40"></div>
+
+    <!-- PLANTAS -->
+    <div class="pagina" id="plantas">
+      <h2>🌿 Banco de Plantas</h2>
+      <div id="lista-plantas"></div>
     </div>
-    <button class="sucesso" onclick="registrarMedicao()">💾 Salvar Medição</button>
-    <h3>📈 Histórico</h3>
-    <div id="historico"></div>
-  </div>
 
-  <div class="conteudo oculto" id="pag-plantas">
-    <h3>🌿 Banco de Plantas</h3>
-    <div id="lista-plantas"></div>
-  </div>
+    <!-- ROTINA -->
+    <div class="pagina" id="rotina">
+      <h2>🔧 Rotina & Lembretes</h2>
+      <h3>➕ Nova Tarefa</h3>
+      <label>O que fazer:</label>
+      <input type="text" id="nome-tarefa" placeholder="Ex: Trocar 25% da água e limpar vidro">
+      <label>Frequência:</label>
+      <select id="freq">
+        <option value="Diária">☀️ Diária</option>
+        <option value="Semanal" selected>📅 Semanal</option>
+        <option value="Quinzenal">📆 Quinzenal</option>
+        <option value="Mensal">🗓️ Mensal</option>
+        <option value="Única">📌 Única vez</option>
+      </select>
+      <button class="sucesso" onclick="adicionarTarefa()">✅ Criar Lembrete</button>
+      
+      <h3>📋 Minha Rotina</h3>
+      <div id="lista-tarefas"></div>
+    </div>
 
-  <div class="conteudo oculto" id="pag-rotina">
-    <h3>📅 Nova Tarefa</h3>
-    <label>O que fazer:</label>
-    <input type="text" id="nome-tarefa" placeholder="Ex: Trocar 25% da água">
-    <label>Frequência:</label>
-    <select id="freq">
-      <option value="Diária">Diária</option>
-      <option value="Semanal" selected>Semanal</option>
-      <option value="Quinzenal">Quinzenal</option>
-      <option value="Mensal">Mensal</option>
-    </select>
-    <button class="sucesso" onclick="adicionarTarefa()">✅ Criar Lembrete</button>
-    <h3>📋 Minha Rotina</h3>
-    <div id="minhas-tarefas"></div>
-  </div>
+    <!-- SAÚDE -->
+    <div class="pagina" id="saude">
+      <h2>🏥 Saúde & Diagnóstico</h2>
+      <h3>🔍 Diagnóstico Rápido</h3>
+      <label>Qual o sintoma principal que está vendo?</label>
+      <select id="sintoma" onchange="diagnosticar()">
+        <option value="">-- Escolha um sintoma --</option>
+        <option value="manchas brancas">⚪ Manchas brancas no corpo/barbatanas</option>
+        <option value="barbatanas desfiadas">🩹️ Barbatanas desfiadas/quebradas</option>
+        <option value="peixe na superficie">🫁 Fica na superfície respirando forte</option>
+        <option value="agua turva branca">🌫️ Água turva/branca/nublada</option>
+        <option value="perda de cor">🎨 Perdeu a cor / mais escuro/pálido</option>
+      </select>
+      <div class="card" id="res-diagnostico" style="display:none;margin-top:15px"></div>
+      
+      <h3>📖 Guia de Referência</h3>
+      <div class="card">
+        <h4>💧 Valores Ideais — Água Doce</h4>
+        <ul>
+          <li><strong>pH:</strong> 6.0 – 7.5</li>
+          <li><strong>Temperatura:</strong> 24°C – 28°C</li>
+          <li><strong>Amônia / Nitrito:</strong> 0 (ZERO)</li>
+          <li><strong>Nitrato:</strong> Abaixo de 40 ppm</li>
+          <li><strong>GH (dureza):</strong> 2 – 15 °dH</li>
+        </ul>
+        <h4 style="margin-top:15px">🔄 Rotina Recomendada</h4>
+        <ul>
+          <li><strong>Diário:</strong> Observar comportamento, verificar equipamentos, alimentar pouco</li>
+          <li><strong>Semanal:</strong> Troca de 20–30% da água, limpar vidro, retirar resíduos</li>
+          <li><strong>Mensal:</strong> Limpeza do filtro em água do próprio aquário, testes completos</li>
+        </ul>
+      </div>
+    </div>
 
-  <div class="conteudo oculto" id="pag-gastos">
-    <h3>💰 Novo Gasto</h3>
-    <label>Descrição:</label>
-    <input type="text" id="desc-gasto" placeholder="Ex: 3 Coridoras + ração">
-    <label>Valor (R$):</label>
-    <input type="number" step="0.01" id="val-gasto" placeholder="0.00">
-    <button class="sucesso" onclick="registrarGasto()">💾 Registrar</button>
-    <h3>📊 Total: R$ <span id="soma-gastos">0.00</span></h3>
-    <div id="lista-gastos"></div>
-  </div>
+    <!-- GASTOS -->
+    <div class="pagina" id="gastos">
+      <h2>💰 Controle de Gastos</h2>
+      <h3>➕ Novo Gasto</h3>
+      <label>Descrição:</label>
+      <input type="text" id="desc-gasto" placeholder="Ex: Ração, Filtro, 3 Coridoras">
+      <label>Valor (R$):</label>
+      <input type="number" step="0.01" id="valor-gasto" placeholder="0.00">
+      <button class="sucesso" onclick="adicionarGasto()">💾 Registrar Gasto</button>
+      
+      <h3>📊 Resumo</h3>
+      <p style="font-size:1.4rem;font-weight:bold">Total Investido: R$ <span id="soma-gastos">0.00</span></p>
+      <div id="lista-gastos"></div>
+    </div>
 
-  <div class="conteudo oculto" id="pag-desejos">
-    <h3>🛒 Lista de Desejos</h3>
-    <p style="color:#666;font-size:.85rem">Salve peixes que quer comprar depois!</p>
-    <div id="lista-desejos"></div>
+    <!-- LISTA DE DESEJOS -->
+    <div class="pagina" id="desejos">
+      <h2>🛒 Lista de Desejos</h2>
+      <p style="color:#666;font-size:.9rem;margin-bottom:15px">Salve peixes que quer comprar no futuro e veja se cabem no seu aquário!</p>
+      <div id="lista-desejos"></div>
+    </div>
   </div>
 </div>
 
 <script>
-let sessao = localStorage.getItem("sessao") || null;
-let adminToken = localStorage.getItem("adminToken") || null;
-let bancoPeixes = [], bancoPlantas = [];
-let dadosUsuario = null;
-let filtroAtivo = "todos";
+const API = window.location.origin;
+let banco = [], plantas = [], doencas = [];
+let meus = [], desejos = [], historico = [], tarefas = [], gastos = [], volume = 0;
+let filtroAtivo = 'todos';
 
-// === INICIALIZAÇÃO ===
-if(localStorage.getItem("tema") === "escuro") document.body.classList.add("escuro");
-if(adminToken) abrirPainelAdmin();
-else if(sessao) carregarDadosUsuario();
-carregarBancos();
-
-// === TEMA ===
+// Alternar tema
 function alternarTema(){
-  document.body.classList.toggle("escuro");
-  localStorage.setItem("tema", document.body.classList.contains("escuro") ? "escuro" : "claro");
+  document.body.classList.toggle('escuro');
+  localStorage.setItem('tema', document.body.classList.contains('escuro') ? 'escuro' : 'claro');
 }
+if(localStorage.getItem('tema')==='escuro') document.body.classList.add('escuro');
 
-// === TELA DE LOGIN — TROCAR ABA ===
-function trocarAbaForm(aba){
-  document.querySelectorAll("#form-login,#form-cadastro,#form-admin").forEach(f=>f.classList.add("oculto"));
-  document.getElementById(`form-${aba}`).classList.remove("oculto");
-  document.querySelectorAll(".aba-form button").forEach(b=>b.classList.remove("ativa"));
-  event.target.classList.add("ativa");
-}
-
-// === CADASTRO DE USUÁRIO ===
-async function fazerCadastro(){
-  const dados = {
-    nome: document.getElementById("cad-nome").value,
-    email: document.getElementById("cad-email").value,
-    senha: document.getElementById("cad-senha").value,
-    whatsapp: document.getElementById("cad-whatsapp").value,
-    estado: document.getElementById("cad-estado").value,
-    cidade: document.getElementById("cad-cidade").value
+// Trocar abas
+document.querySelectorAll('.aba').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.aba').forEach(a=>a.classList.remove('ativa'));
+    document.querySelectorAll('.pagina').forEach(p=>p.classList.remove('ativa'));
+    b.classList.add('ativa');
+    document.getElementById(b.dataset.pag).classList.add('ativa');
+    document.getElementById('msg-meus')?.classList.add('oculto');
   };
-  const res = await fetch("/cadastrar", {
-    method:"POST", 
-    headers:{"Content-Type":"application/json"}, 
-    body:JSON.stringify(dados)
-  }).then(r=>r.json());
+});
+
+// Mostrar mensagem
+function mostrarMsg(texto, tipo='sucesso'){
+  const el = document.getElementById('msg-meus');
+  if(!el) return;
+  el.className = tipo==='sucesso' ? 'sucesso-msg' : 'erro';
+  el.textContent = texto;
+  el.classList.remove('oculto');
+  setTimeout(()=>el.classList.add('oculto'), 3000);
+}
+
+// Carregar tudo
+async function carregar(){
+  try{
+    const [bancoRes, plantasRes, doencasRes, dadosRes] = await Promise.all([
+      fetch(`${API}/banco-peixes`),
+      fetch(`${API}/banco-plantas`),
+      fetch(`${API}/doencas`),
+      fetch(`${API}/dados`)
+    ]);
+    
+    if(!bancoRes.ok) throw new Error("Servidor respondeu mal");
+    
+    banco = await bancoRes.json();
+    plantas = await plantasRes.json();
+    doencas = await doencasRes.json();
+    const d = await dadosRes.json();
+    
+    meus = d.meus_peixes || [];
+    desejos = d.desejos || [];
+    historico = d.historico || [];
+    tarefas = d.tarefas || [];
+    gastos = d.gastos || [];
+    volume = d.volume || 0;
+    
+    document.getElementById('status-geral').className = 'status ok';
+    document.getElementById('status-geral').textContent = '✅ Conectado';
+  }catch(e){
+    console.error("Erro ao carregar:", e);
+    document.getElementById('status-geral').className = 'status alerta';
+    document.getElementById('status-geral').textContent = '❌ Erro de conexão';
+    return;
+  }
   
-  if(res.ok){
-    document.getElementById("msg-sucesso-cad").textContent = res.mensagem;
-    document.getElementById("msg-sucesso-cad").classList.remove("oculto");
-    document.getElementById("msg-erro-cad").classList.add("oculto");
-    setTimeout(()=>trocarAbaForm("login"), 1500);
+  atualizarResumo();
+  preencherSelect();
+  atualizarBanco();
+  listarMeus();
+  listarPlantas();
+  listarTarefas();
+  listarHistorico();
+  listarDesejos();
+  atualizarTelaInicio();
+  atualizarStatus();
+}
+
+function atualizarResumo(){
+  document.getElementById('vol').textContent = volume+' L';
+  document.getElementById('qtd-peixes').textContent = meus.length;
+  document.getElementById('qtd-banco').textContent = banco.length;
+  const soma = gastos.reduce((s,g)=>s+(g.valor||0),0);
+  document.getElementById('total-gasto').textContent = 'R$'+soma.toFixed(0);
+  document.getElementById('soma-gastos').textContent = soma.toFixed(2);
+  
+  if(volume>0 && meus.length>0){
+    const minLitrosNecessario = meus.reduce((s,p)=>{
+      const sp = banco.find(x=>x.nome===p.nome);
+      return s + (sp ? sp.litros_min : 0);
+    },0);
+    const sobra = volume - (minLitrosNecessario/2);
+    document.getElementById('ocupacao').textContent = sobra>0 ? `+${sobra.toFixed(0)}L livre` : '⚠️ Atenção!';
   }else{
-    document.getElementById("msg-erro-cad").textContent = res.erro;
-    document.getElementById("msg-erro-cad").classList.remove("oculto");
+    document.getElementById('ocupacao').textContent = '—';
   }
 }
 
-// === LOGIN USUÁRIO ===
-async function fazerLogin(){
-  const dados = {
-    email: document.getElementById("login-email").value,
-    senha: document.getElementById("login-senha").value
-  };
-  const res = await fetch("/login", {
-    method:"POST", 
-    headers:{"Content-Type":"application/json"}, 
-    body:JSON.stringify(dados)
-  }).then(r=>r.json());
+function atualizarStatus(){
+  const el = document.getElementById('status-geral');
+  let status = 'ok', mensagem = '✅ Tudo OK';
   
-  if(res.ok){
-    sessao = res.sessao;
-    localStorage.setItem("sessao", sessao);
-    dadosUsuario = res.usuario;
-    abrirTelaPrincipal();
-  }else{
-    document.getElementById("msg-erro-login").textContent = res.erro;
-    document.getElementById("msg-erro-login").classList.remove("oculto");
+  const ultimo = historico[historico.length-1];
+  if(ultimo){
+    if((ultimo.ph && (ultimo.ph<5.5 || ultimo.ph>8.0)) || (ultimo.temp && (ultimo.temp<22 || ultimo.temp>30))){
+      status = 'aviso'; mensagem = '⚠️ Atenção aos parâmetros';
+    }
   }
+  const pendentes = tarefas.filter(t=>!t.concluida).length;
+  if(pendentes>2){ status = 'aviso'; mensagem = '⚠️ Tarefas pendentes'; }
+  if(volume===0){ status = 'aviso'; mensagem = '📐 Defina o volume'; }
+  
+  el.className = 'status '+status;
+  el.textContent = mensagem;
 }
 
-// === LOGIN DO DONO — IVES ===
-async function loginAdmin(){
-  const senha = document.getElementById("admin-senha").value;
-  const res = await fetch("/admin-login", {
-    method:"POST", 
-    headers:{"Content-Type":"application/json"}, 
-    body:JSON.stringify({senha})
-  }).then(r=>r.json());
-  
-  if(res.ok){
-    adminToken = res.admin_token;
-    localStorage.setItem("adminToken", adminToken);
-    abrirPainelAdmin();
-  }else{
-    document.getElementById("msg-erro-admin").textContent = res.erro;
-    document.getElementById("msg-erro-admin").classList.remove("oculto");
-  }
+function preencherSelect(){
+  const sel = document.getElementById('sel-peixe');
+  sel.innerHTML = '<option value="">-- Escolha no Banco --</option>' +
+    banco.map(p=>`<option value="${p.nome}">${p.nome} — ${p.tamanho}cm | ${p.litros_min}L min</option>`).join('');
 }
 
-function abrirPainelAdmin(){
-  esconderTodasTelas();
-  document.getElementById("tela-admin").classList.add("ativa");
-  carregarListaUsuarios();
+function filtrarBanco(f){
+  filtroAtivo = f;
+  document.querySelectorAll('.filtro').forEach(b=>b.classList.remove('ativo'));
+  document.querySelector(`[data-filtro="${f}"]`).classList.add('ativo');
+  atualizarBanco();
 }
 
-function esconderTodasTelas(){
-  document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
-}
-
-// === CARREGAR LISTA DE TODOS OS USUÁRIOS ===
-async function carregarListaUsuarios(){
-  const res = await fetch("/admin/todos-usuarios", {
-    method:"POST", 
-    headers:{"Content-Type":"application/json"}, 
-    body:JSON.stringify({admin_token: adminToken})
-  }).then(r=>r.json());
+function atualizarBanco(){
+  const busca = document.getElementById('busca').value.toLowerCase();
+  let lista = banco.filter(p=>
+    p.nome.toLowerCase().includes(busca) ||
+    p.cientifico.toLowerCase().includes(busca) ||
+    p.origem.toLowerCase().includes(busca)
+  );
   
-  if(!res.ok){ sairAdmin(); return; }
+  if(filtroAtivo==='pacifico') lista = lista.filter(p=>p.comportamento==='pacifico');
+  if(filtroAtivo==='cardume') lista = lista.filter(p=>String(p.qtd_min).includes('6') || String(p.qtd_min).includes('M'));
+  if(filtroAtivo==='fundo') lista = lista.filter(p=>p.nivel.includes('fundo'));
+  if(filtroAtivo==='grande') lista = lista.filter(p=>p.tipo==='grande');
+  if(filtroAtivo==='compat') lista = lista.filter(p=>p.litros_min<=volume && !meus.some(m=>m.nome===p.nome));
   
-  document.getElementById("admin-total-usuarios").textContent = res.total;
-  const hoje = new Date().toLocaleDateString("pt-BR");
-  const diaMes = hoje.split("/").slice(0,2).join("/");
-  const cadHoje = res.usuarios.filter(u=>u.data_cadastro.startsWith(diaMes)).length;
-  document.getElementById("admin-cad-hoje").textContent = cadHoje;
-  document.getElementById("admin-ativos").textContent = res.usuarios.filter(u=>u.qtd_peixes>0).length;
-  document.getElementById("admin-cidades").textContent = [...new Set(res.usuarios.map(u=>u.cidade))].length;
-  
-  let html = `<table class="tabela"><tr>
-    <th>Nome</th><th>Contato</th><th>Local</th><th>Aquário</th><th>Última Atividade</th><th>Ações</th>
-  </tr>`;
-  res.usuarios.forEach(u=>{
-    html += `<tr>
-      <td><strong>${u.nome}</strong><br><small>${u.email}</small></td>
-      <td>${u.whatsapp}</td>
-      <td>${u.cidade} – ${u.estado
+  document.getElementById('lista-banco').innerHTML = lista.length===0 ?
+    '<p>Nenhuma espécie encontrada.</p>' :
+    lista.map(p=>{
+      const jaTem = meus.some(m=>m.nome===p.nome);
+      const cabe = volume >= p.litros_min;
+      return `
+      <div class="card ${jaTem?'ok':''} ${!cabe && volume>0?'aviso':''}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
+          <div>
+            <strong>${p.nome}</strong> <em style="color:#666;font-size:.85rem">${p.cientifico}</em>
+            ${jaTem?'<span class="tag" style="background:#dcfce7;color:#166534;margin-left:6px">✅ Já tem</span>':''}
+            ${!cabe && volume>0?`<span class="tag" style="background:#fee2e2;color:#991b1b;margin-left:6px">⚠️ Precisa de ${p.litros_min}L</span>`:''}
+          </div>
+          <div>
+            <button class="pequeno linha" onclick="adicionarDesejo('${p.nome}')">🛒 Desejo</button>
+            ${cabe && !jaTem?`<button class="sucesso pequeno linha" onclick="document.getElementById('sel-peixe').value='${p.nome}';document.querySelector('[data-pag=meus]').click()">➕ Adicionar</button>`:''}
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:.9rem;line-height:1.
